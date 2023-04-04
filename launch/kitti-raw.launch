@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<launch>
+    <node name="mot_node" pkg="multiple-object-tracking" type="main.py" output="screen" />
+        <rosparam file="$(find multiple-object-tracking)/config/kitti-raw.yaml" command="load" />
+
+    <node name="rviz_mot" pkg="rviz" type="rviz" required="false"
+          args="-d $(find multiple-object-tracking)/rviz/kitti-raw.rviz" />
+
+</launch>
