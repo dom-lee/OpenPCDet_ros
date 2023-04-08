@@ -1,11 +1,19 @@
 # Subscriber (LiDAR) Params
-pointcloud_topic: "/kitti/velo/pointcloud" 
+pointcloud_topic: "/points_raw" 
 
 # Publisher (BBOX) Parmas
 bbox_topic: "/detect_3dbox"
-bbox_frame_id: "velo_link"
 threshold: 0.5
 
 # OpenPCDet Params
-cfg_file: "OpenPCDet/tools/cfgs/kitti_models/voxel_rcnn_car.yaml"
-ckpt_file: "OpenPCDet/ckpt/voxel_rcnn_car_84.54.pth" 
+#cfg_file: "OpenPCDet/tools/cfgs/kitti_models/pv_rcnn.yaml"
+#ckpt_file: "OpenPCDet/ckpt/pv_rcnn_8369.pth" 
+#
+#cfg_file: "OpenPCDet/tools/cfgs/kitti_models/voxel_rcnn_car.yaml"
+#ckpt_file: "OpenPCDet/ckpt/voxel_rcnn_car_84.54.pth" 
+#
+#cfg_file: "OpenPCDet/tools/cfgs/kitti_models/second.yaml"
+#ckpt_file: "OpenPCDet/ckpt/second_7862.pth" 
+#
+cfg_file: "OpenPCDet/tools/cfgs/kitti_models/second_iou.yaml"
+ckpt_file: "OpenPCDet/ckpt/second_iou7909.pth" 

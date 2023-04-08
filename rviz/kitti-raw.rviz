@@ -6,6 +6,7 @@ Panels:
       Expanded:
         - /Global Options1
         - /Status1
+        - /PointCloud21
         - /BoundingBoxArray1
       Splitter Ratio: 0.5
     Tree Height: 1873
@@ -75,7 +76,7 @@ Visualization Manager:
       Size (Pixels): 3
       Size (m): 0.009999999776482582
       Style: Flat Squares
-      Topic: /kitti/velo/pointcloud
+      Topic: /points_raw
       Unreliable: false
       Use Fixed Frame: true
       Use rainbow: true
@@ -89,15 +90,15 @@ Visualization Manager:
       Value: true
       alpha: 0.800000011920929
       color: 25; 255; 0
-      coloring: Auto
-      line width: 0.10000000149011612
+      coloring: Label
+      line width: 0.05000000074505806
       only edge: true
       show coords: false
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
     Default Light: true
-    Fixed Frame: velo_link
+    Fixed Frame: velodyne
     Frame Rate: 30
   Name: root
   Tools:
@@ -121,7 +122,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 29.655540466308594
+      Distance: 43.292598724365234
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -129,17 +130,17 @@ Visualization Manager:
         Value: false
       Field of View: 0.7853981852531433
       Focal Point:
-        X: 0
-        Y: 0
-        Z: 0
+        X: 0.03555074706673622
+        Y: 0.003345206379890442
+        Z: 0.038299161940813065
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.7253973484039307
+      Pitch: 0.6853973865509033
       Target Frame: <Fixed Frame>
-      Yaw: 2.885411024093628
+      Yaw: 3.1654129028320312
     Saved: ~
 Window Geometry:
   Displays:

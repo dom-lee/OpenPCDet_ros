@@ -46,9 +46,8 @@ def timer_decorator(func):
 
 def load_params():
     params = {
-        "pointcloud_topic": "/velodyne_points",
+        "pointcloud_topic": "/points_raw",
         "bbox_topic": "/detect_3dbox",
-        "bbox_frame_id": "map",
         "threshold": 0.5,
         "cfg_file": None,
         "ckpt_file": None
@@ -119,11 +118,12 @@ class OpenPCDet:
 
         self.pointcloud = np.empty((0, 4)) # 'x', 'y', 'z', 'i'
         self.header = None
-        
+
         self.publisher = None
 
         self.setup()
-    
+
+    @timer_decorator
     def setup(self):
         cfg_from_yaml_file(self.cfg_file, cfg)
         self.logger = common_utils.create_logger()
@@ -146,7 +146,7 @@ class OpenPCDet:
     def run(self):
         input_dict = {
             'points': self.pointcloud,
-            'frame_id': 0,
+            'frame_id': self.header.seq,
         }
 
         data_dict = self.dataset.prepare_data(data_dict=input_dict)
@@ -158,18 +158,20 @@ class OpenPCDet:
         pred_scores = pred_dicts[0]['pred_scores'].detach().cpu().numpy()
         pred_labels = pred_dicts[0]['pred_labels'].detach().cpu().numpy()
 
-        return pred_boxes, pred_scores, pred_labels
-
-
-    def pointcloud_callback(self, msg):
-        msg_array = ros_numpy.point_cloud2.pointcloud2_to_array(msg)
-        self.pointcloud = msg_array.view(dtype=np.float32).reshape(msg_array.shape + (-1,))
-        self.header = msg.header
-
-        pred_boxes, pred_scores, pred_labels = self.run()
-
+        # Publish 3d-BBox
         self.publish_bbox_array(pred_boxes, pred_scores, pred_labels)
 
+    @timer_decorator
+    def pointcloud_callback(self, msg):
+        msg_array = ros_numpy.point_cloud2.pointcloud2_to_array(msg)
+        self.pointcloud = np.zeros(msg_array.shape + (4,), dtype=np.float32)
+        self.pointcloud[...,0] = msg_array['x']
+        self.pointcloud[...,1] = msg_array['y']
+        self.pointcloud[...,2] = msg_array['z']
+        self.pointcloud[...,3] = msg_array['intensity']
+        self.header = msg.header
+
+        self.run()
 
     def publish_bbox_array(self, pred_boxes, pred_scores, pred_labels):
         bbox_array = BoundingBoxArray()
@@ -202,7 +204,7 @@ def main():
 
     # Set Publisher
     bbox_pub = rospy.Publisher(params.bbox_topic, BoundingBoxArray,
-                               queue_size=10)
+                               queue_size=1)
 
     # Construct OpenPCDet
     open_pc_det = OpenPCDet(params.cfg_file, params.ckpt_file, params)
@@ -211,9 +213,17 @@ def main():
     # Set Subscriber
     pointcloud_sub = rospy.Subscriber(params.pointcloud_topic, PointCloud2,
                                       open_pc_det.pointcloud_callback,
-                                      queue_size=1)
+                                      queue_size=1, buff_size=52428800)
 
-    rospy.spin()
+    # r = rospy.Rate(20)
+    # while not rospy.is_shutdown():
+        # if open_pc_det.pointcloud.size:
+            # # Inference
+            # open_pc_det.run()
+
+        # r.sleep();
+
+    rospy.spin();
 
 if __name__ == '__main__':
     main()
