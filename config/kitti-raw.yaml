@@ -3,7 +3,7 @@ pointcloud_topic: "/points_raw"
 
 # Publisher (BBOX) Parmas
 bbox_topic: "/detect_3dbox"
-threshold: 0.5
+threshold: 0.1
 
 # OpenPCDet Params
 #cfg_file: "OpenPCDet/tools/cfgs/kitti_models/pv_rcnn.yaml"
@@ -17,3 +17,6 @@ threshold: 0.5
 #
 cfg_file: "OpenPCDet/tools/cfgs/kitti_models/second_iou.yaml"
 ckpt_file: "OpenPCDet/ckpt/second_iou7909.pth" 
+#
+#cfg_file: "OpenPCDet/tools/cfgs/kitti_models/PartA2.yaml"
+#ckpt_file: "OpenPCDet/ckpt/PartA2_7940.pth" 
